@@ -1,6 +1,6 @@
 const headers = {
   accept: '*/*',
-  'accept-encoding': 'gzip, deflate, br, zstd',
+  'accept-encoding': 'identity',
   'accept-language': 'en-US,en;q=0.6',
   'cache-control': 'no-cache',
   'content-type': 'application/x-www-form-urlencoded',
