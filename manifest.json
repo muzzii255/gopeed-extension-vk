@@ -4,7 +4,7 @@
   "title": "VK Video Downloader",
   "description": "Download videos from VK.com",
   "icon": "./icons/vk.png",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "homepage": "https://github.com/muzzii255/gopeed-extension-vk",
   "repository": {
     "url": "https://github.com/muzzii255/gopeed-extension-vk"
