@@ -1,0 +1,41 @@
+{
+  "name": "gopeed-extension-vk",
+  "author": "muzzii255",
+  "title": "VK Video Downloader",
+  "description": "Download videos from VK.com",
+  "icon": "./icons/vk.png",
+  "version": "1.0.0",
+  "homepage": "https://github.com/muzzii255/gopeed-extension-vk",
+  "repository": {
+    "url": "https://github.com/muzzii255/gopeed-extension-vk"
+  },
+  "scripts": [
+    {
+      "event": "onResolve",
+      "match": {
+        "urls": ["*://vk.com/video*", "*://vk.com/*z=video*"]
+      },
+      "entry": "dist/index.js"
+    }
+  ],
+  "settings": [
+    {
+      "name": "preferredQuality",
+      "title": "Preferred Quality",
+      "description": "Select preferred video quality. Falls back to highest available if not found.",
+      "type": "string",
+      "value": "",
+      "options": [
+        { "label": "Auto (Highest)", "value": "" },
+        { "label": "4K (2160p)", "value": "2160" },
+        { "label": "2K (1440p)", "value": "1440" },
+        { "label": "1080p", "value": "1080" },
+        { "label": "720p", "value": "720" },
+        { "label": "480p", "value": "480" },
+        { "label": "360p", "value": "360" },
+        { "label": "240p", "value": "240" },
+        { "label": "144p", "value": "144" }
+      ]
+    }
+  ]
+}
