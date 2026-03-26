@@ -62,7 +62,13 @@ export async function parseDownloadUrl(videoUrl, preferredQuality = '') {
   // Get file size via HEAD request
   let fileSize = 0;
   if (downloadLink) {
-    const headResp = await fetch(downloadLink, { method: 'HEAD' });
+    const headResp = await fetch(downloadLink, {
+      method: 'HEAD',
+      headers: {
+        'user-agent': headers['user-agent'],
+        referer: 'https://vk.com',
+      },
+    });
     const contentLength = headResp.headers.get('content-length');
     if (contentLength) {
       fileSize = parseInt(contentLength, 10);
