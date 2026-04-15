@@ -21,6 +21,8 @@ const headers = {
   'x-requested-with': 'XMLHttpRequest',
 };
 
+const MAX_RETRIES = 3;
+
 export async function parseDownloadUrl(videoUrl, preferredQuality = '') {
   const mainUrl = 'https://vk.com/al_video.php?act=show';
   const allQualities = ['url2160', 'url1440', 'url1080', 'url720', 'url480', 'url360', 'url240', 'url144'];
@@ -32,36 +34,44 @@ export async function parseDownloadUrl(videoUrl, preferredQuality = '') {
   }
 
   var payload = `act=show&al=1&al_ad=0&autoplay=1&list=&module=group&screen=0&show_next=1&video=${videoId}&webcast=0`;
-  const resp = await fetch(mainUrl, {
-    method: 'POST',
-    headers: headers,
-    body: payload,
-  });
 
   let downloadLink;
-  const body = await resp.json();
-  const arr = body['payload'][1];
-  const urlBody = arr[arr.length - 1]['player']['params'][0];
+  let fileSize = 0;
 
-  if (preferredQuality) {
-    const preferredKey = `url${preferredQuality}`;
-    if (urlBody[preferredKey] && urlBody[preferredKey] !== '') {
-      downloadLink = urlBody[preferredKey];
-    }
-  }
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    const resp = await fetch(mainUrl, {
+      method: 'POST',
+      headers: headers,
+      body: payload,
+    });
 
-  if (!downloadLink) {
-    for (const key of allQualities) {
-      if (urlBody[key] && urlBody[key] !== '') {
-        downloadLink = urlBody[key];
-        break;
+    const body = await resp.json();
+    const arr = body['payload'][1];
+    const urlBody = arr[arr.length - 1]['player']['params'][0];
+
+    if (preferredQuality) {
+      const preferredKey = `url${preferredQuality}`;
+      if (urlBody[preferredKey] && urlBody[preferredKey] !== '') {
+        downloadLink = urlBody[preferredKey];
       }
     }
-  }
 
-  // Get file size via HEAD request
-  let fileSize = 0;
-  if (downloadLink) {
+    if (!downloadLink) {
+      for (const key of allQualities) {
+        if (urlBody[key] && urlBody[key] !== '') {
+          downloadLink = urlBody[key];
+          break;
+        }
+      }
+    }
+
+    if (!downloadLink) {
+      if (attempt < MAX_RETRIES) {
+        continue;
+      }
+      break;
+    }
+
     const headResp = await fetch(downloadLink, {
       method: 'HEAD',
       headers: {
@@ -72,6 +82,10 @@ export async function parseDownloadUrl(videoUrl, preferredQuality = '') {
     const contentLength = headResp.headers.get('content-length');
     if (contentLength) {
       fileSize = parseInt(contentLength, 10);
+    }
+
+    if (fileSize > 0) {
+      break;
     }
   }
 

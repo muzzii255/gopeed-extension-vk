@@ -11,6 +11,7 @@ A Gopeed extension for downloading videos from VK.com.
 ## Supported URLs
 
 - `https://vk.com/video-XXXXXX_XXXXXX`
+- `https://vkvideo.ru/video-XXXXXX_XXXXXX`
 - `https://vk.com/...?z=video-XXXXXX_XXXXXX`
 
 ## Installation

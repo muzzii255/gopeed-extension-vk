@@ -4,7 +4,7 @@
   "title": "VK Video Downloader",
   "description": "Download videos from VK.com",
   "icon": "./icons/vk.png",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/muzzii255/gopeed-extension-vk",
   "repository": {
     "url": "https://github.com/muzzii255/gopeed-extension-vk"
@@ -13,7 +13,7 @@
     {
       "event": "onResolve",
       "match": {
-        "urls": ["*://vk.com/video*", "*://vk.com/*z=video*"]
+        "urls": ["*://vkvideo.ru/video*", "*://vk.com/video*", "*://vk.com/*z=video*"]
       },
       "entry": "dist/index.js"
     }
